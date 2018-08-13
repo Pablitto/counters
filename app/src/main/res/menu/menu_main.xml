@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	
+	<item
+		android:id="@+id/action_counter"
+		android:icon="@drawable/icon"
+		android:title="@string/counter"
+		app:showAsAction="ifRoom"/>
+	
+	<item
+		android:id="@+id/action_counter_2"
+		android:actionLayout="@layout/badge_with_counter"
+		android:title="@string/counter"
+		app:showAsAction="always"/>
+
+</menu>
