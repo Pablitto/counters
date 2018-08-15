@@ -3,4 +3,7 @@
 	<color name="colorPrimary">#3F51B5</color>
 	<color name="colorPrimaryDark">#303F9F</color>
 	<color name="colorAccent">#FF4081</color>
+	
+	<color name="counter_background_color">@android:color/holo_red_light</color>
+	<color name="counter_text_color">@android:color/white</color>
 </resources>

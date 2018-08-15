@@ -8,10 +8,10 @@
 		<item name="colorAccent">@color/colorAccent</item>
 	</style>
 	
-	<style name="Counter">
+	<style name="CounterText">
 		<item name="android:fontFamily">sans-serif</item>
-		<item name="android:textSize">9sp</item>
-		<item name="android:textColor">@android:color/white</item>
+		<item name="android:textSize">@dimen/counter_text_size</item>
+		<item name="android:textColor">@color/counter_text_color</item>
 		<item name="android:textStyle">normal</item>
 	</style>
 

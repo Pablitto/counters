@@ -3,15 +3,21 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 	
 	<item
-		android:id="@+id/action_counter"
+		android:id="@+id/action_counter_1"
 		android:icon="@drawable/icon"
-		android:title="@string/counter"
-		app:showAsAction="ifRoom"/>
+		android:title="icon"
+		app:showAsAction="always"/>
 	
 	<item
 		android:id="@+id/action_counter_2"
-		android:actionLayout="@layout/badge_with_counter"
-		android:title="@string/counter"
+		android:icon="@drawable/ic_layered_counter_icon"
+		android:title="layered icon"
+		app:showAsAction="ifRoom"/>
+	
+	<item
+		android:id="@+id/action_counter_3"
+		app:actionLayout="@layout/badge_with_counter"
+		android:title="existing action view"
 		app:showAsAction="always"/>
 
 </menu>

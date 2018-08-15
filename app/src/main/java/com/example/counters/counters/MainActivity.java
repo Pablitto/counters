@@ -1,6 +1,8 @@
 package com.example.counters.counters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -12,14 +14,18 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 	
-	private int mCounterValue = 0;
+	private int mCounterValue1 = 0;
+	private int mCounterValue2 = 0;
+	private int mCounterValue3 = 0;
+	private int mCounterValue4 = 0;
 	
-	private ImageView mIcon;
-	private TextView mCounterText;
+	private LayerDrawable mIcon2;
 	
-	private ImageView mIcon2;
-	private TextView mCounterText2;
+	private ImageView mIcon3;
+	private TextView mCounterText3;
 	
+	private ImageView mIcon4;
+	private TextView mCounterText4;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,97 +35,131 @@ public class MainActivity extends AppCompatActivity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(final Menu menu) {
-		initCounterElements(menu);
+		
+		// second counter
+		initSecondCounter(menu);
+		
+		initThirdCounter(menu);
+		
 		return super.onPrepareOptionsMenu(menu);
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
-		MenuItem menuItem = menu.findItem(R.id.action_counter);
-		menuItem.setIcon(LayoutToDrawableConverter.convertToImage(this, mCounterValue, R.drawable.icon));
-		addActivityCounter(menu, this);
+		MenuItem menuItem = menu.findItem(R.id.action_counter_1);
+		
+		// first counter
+		menuItem.setIcon(LayoutToDrawableConverter.convertToImage(this, mCounterValue1, R.drawable.icon));
+		
+		// third counter
+		addFourthCounter(menu, this);
 		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_counter:
-				updateCounter(mCounterValue + 1);
+			case R.id.action_counter_1:
+				updateFirstCounter(mCounterValue1 + 1);
+				return true;
+			case R.id.action_counter_2:
+				updateSecondCounter(++mCounterValue2);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
 	
-	private void updateCounter(int newCounterValue) {
-		mCounterValue = newCounterValue;
+	private void updateFirstCounter(int newCounterValue) {
+		mCounterValue1 = newCounterValue;
 		invalidateOptionsMenu();
 	}
 	
-	public void addActivityCounter(Menu menu, Context context) {
+	private void initSecondCounter(Menu menu){
+		MenuItem menuItem = menu.findItem(R.id.action_counter_2);
+		mIcon2 = (LayerDrawable) menuItem.getIcon();
+		
+		updateSecondCounter(mCounterValue2);
+	}
+	
+	private void initThirdCounter(Menu menu){
+		MenuItem counterItem = menu.findItem(R.id.action_counter_3);
+		View counter = counterItem.getActionView();
+		
+		mIcon3 = counter.findViewById(R.id.icon_badge);
+		mCounterText3 = counter.findViewById(R.id.counter);
+		
+		counter.setOnClickListener(v -> onThirdCounterClick());
+		updateThirdCounter(mCounterValue3);
+	}
+	
+	private void addFourthCounter(Menu menu, Context context) {
 		
 		View counter = LayoutInflater.from(context)
 		                             .inflate(R.layout.badge_with_counter, null);
-		counter.setOnClickListener(v -> onThirdCounterClick());
-		mIcon = counter.findViewById(R.id.icon_badge);
-		mCounterText = counter.findViewById(R.id.counter);
+		counter.setOnClickListener(v -> onFourthCounterClick());
+		mIcon4 = counter.findViewById(R.id.icon_badge);
+		mCounterText4 = counter.findViewById(R.id.counter);
 		MenuItem counterMenuItem = menu.add(context.getString(R.string.counter));
 		counterMenuItem.setActionView(counter);
 		counterMenuItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		updateThirdCounter(mCounterValue);
-	}
-	
-	public void initCounterElements(Menu menu){
-		MenuItem counterItem = menu.findItem(R.id.action_counter_2);
-		View counter = counterItem.getActionView();
-		
-		//mIcon2 = counter.findViewById(R.id.icon);
-		//mCounterText2 = counter.findViewById(R.id.counter);
-		
-		//counter.setOnClickListener(v -> onSecondCounterClick());
+		updateFourthCounter(mCounterValue4);
 	}
 	
 	private void onThirdCounterClick(){
-		updateThirdCounter(mCounterValue ++);
+		updateThirdCounter(++mCounterValue3);
 	}
 	
-	private void onSecondCounterClick(){
-		updateThirdCounter(mCounterValue ++);
-	}
-	
-	private void updateThirdCounter(int newCounterValue) {
-		
-		if (mIcon == null || mCounterText == null) {
-			return;
-		}
-		
-		if (newCounterValue == 0) {
-			mIcon.setImageResource(R.drawable.icon);
-			mCounterText.setVisibility(View.GONE);
-		} else {
-			mIcon.setImageResource(R.drawable.icon);
-			mCounterText.setVisibility(View.VISIBLE);
-			mCounterText.setText(String.valueOf(newCounterValue));
-		}
+	private void onFourthCounterClick(){
+		updateFourthCounter(++mCounterValue4);
 	}
 	
 	private void updateSecondCounter(int newCounterValue) {
 		
-		if (mIcon == null || mCounterText == null) {
+		CounterDrawable badge;
+		
+		Drawable reuse = mIcon2.findDrawableByLayerId(R.id.ic_counter);
+		if (reuse != null && reuse instanceof CounterDrawable) {
+			badge = (CounterDrawable) reuse;
+		} else {
+			badge = new CounterDrawable(this);
+		}
+		
+		badge.setCount(String.valueOf(newCounterValue));
+		mIcon2.mutate();
+		mIcon2.setDrawableByLayerId(R.id.ic_counter, badge);
+	}
+	
+	private void updateThirdCounter(int newCounterValue) {
+		
+		if (mIcon3 == null || mCounterText3 == null) {
 			return;
 		}
 		
 		if (newCounterValue == 0) {
-			mIcon2.setImageResource(R.drawable.icon);
-			mCounterText2.setVisibility(View.GONE);
+			mIcon3.setImageResource(R.drawable.icon);
+			mCounterText3.setVisibility(View.GONE);
 		} else {
-			mIcon2.setImageResource(R.drawable.icon);
-			mCounterText2.setVisibility(View.VISIBLE);
-			mCounterText2.setText(String.valueOf(newCounterValue));
+			mIcon3.setImageResource(R.drawable.icon);
+			mCounterText3.setVisibility(View.VISIBLE);
+			mCounterText3.setText(String.valueOf(newCounterValue));
 		}
 	}
 	
-	
+	private void updateFourthCounter(int newCounterValue) {
+		
+		if (mIcon4 == null || mCounterText4 == null) {
+			return;
+		}
+		
+		if (newCounterValue == 0) {
+			mIcon4.setImageResource(R.drawable.icon);
+			mCounterText4.setVisibility(View.GONE);
+		} else {
+			mIcon4.setImageResource(R.drawable.icon);
+			mCounterText4.setVisibility(View.VISIBLE);
+			mCounterText4.setText(String.valueOf(newCounterValue));
+		}
+	}
 }
